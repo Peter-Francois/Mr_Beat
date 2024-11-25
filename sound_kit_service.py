@@ -1,8 +1,8 @@
 import wave
 from array import array
 
-# un sound comporte un file name et un display name. Mieux vos separé les 2 pour plus de
-# liberté quand au renomage du sound
+# A sound has a file name and a display name. It's better to separate the two for more flexibility when
+# renaming the sound.
 
 
 class Sound:
@@ -19,12 +19,12 @@ class Sound:
         # frame = sample
         self.nb_samples = wave_file.getnframes()
         frames = wave_file.readframes(self.nb_samples)  # Bytes : 8bits
-        # on recupére un fichier 8 bytes avec readframes. Pour changé en 16 bytes on utilise la lib aray.aray et
-        # on choisie un mode 16 bytes signed 'h' ou 'i'
-        self.samples = array('h', frames)  # le sample est donc maintenant en 16 bytes
+        # We retrieve an 8-byte file with readframes. To change it to 16 bytes, we use the array module and
+        # choose a 16-byte signed mode, either 'h' (short) or 'i' (integer).
+        self.samples = array('h', frames)  # The sample is now in 16 bytes.
 
 
-# Sound kit générique avec la fonction pour savoir le nombre de tracks dans le kit
+# A generic sound kit with a function to determine the number of tracks in the kit.
 class SoundKit:
     sounds = ()
 
@@ -55,17 +55,17 @@ class SoundKit1All(SoundKit):
               Sound("sounds/kit1/pluck.wav", "PLUCK"),
               Sound("sounds/kit1/vocal_chop.wav", "VOCAL CHOP"))
 
-# pour ajouté des sound kit, sur google on peut trouvé des kit gratuit: drum kit sounds free
-# il faut que les fichier soit en wav 16 bit et 44100 samples/s et sample mono
+# To add sound kits, you can find free kits on Google by searching for "drum kit sounds free."
+# The files must be in WAV format, 16-bit, with a sample rate of 44,100 samples per second, and in mono.
 
-# sound kit managment pour selection du kit
+# Sound kit management for selecting the kit.
 class SoundKitService:
     soundkit = SoundKit1()
 
     def get_nb_tracks(self):
         return self.soundkit.get_nb_tracks()
 
-    # pour recupéré le nom du son a un certain index
+    # To retrieve the name of the sound at a certain index.
     def get_sound_at(self, index):
         if index >= len(self.soundkit.sounds):
             return None

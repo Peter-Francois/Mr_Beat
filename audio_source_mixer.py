@@ -6,7 +6,7 @@ from audio_source_track import AudioSourceTrack
 MIN_16BITS = -32768
 MAX_16BITS = 32767
 
-
+# Implementation of saturation to prevent overflow.
 def sum_16bits(n):
     s = sum(n)
     if s > MAX_16BITS:
@@ -15,7 +15,7 @@ def sum_16bits(n):
         s = MIN_16BITS
     return s
 
-class AudioSourceMixer(ThreadSource):  # thread = fil
+class AudioSourceMixer(ThreadSource):
 
     buf = None
 
@@ -26,7 +26,7 @@ class AudioSourceMixer(ThreadSource):  # thread = fil
         for i in range(0, len(all_wav_samples)):
             track = AudioSourceTrack(output_stream, all_wav_samples[i], bpm, sample_rate, min_bpm)
             track.set_steps((0,) * nb_steps)
-            # va créé le nombre de steps en mettant tout à zéro pour tout les audios
+            # Will create the number of steps by setting everything to zero for all audio tracks.
             self.tracks.append(track)
         self.bpm = bpm
         self.buf = None
@@ -63,11 +63,6 @@ class AudioSourceMixer(ThreadSource):  # thread = fil
 
         # Silence
         if not self.is_playing:
-            """AVANT OPTIMISATION
-            for i in range(0, step_nb_samples):
-                self.buf[i] = 0
-            return self.buf[0: step_nb_samples].tobytes()"""
-            # APRES
             return self.silence[0: step_nb_samples].tobytes()
 
         track_buffers = []
@@ -75,26 +70,19 @@ class AudioSourceMixer(ThreadSource):  # thread = fil
             track = self.tracks[i]
             track_buffer = track.get_bytes_array()
             track_buffers.append(track_buffer)
-        """AVANT OPTIMISATION
-        # Ici on viens prendre tous les samples et les additionés pour les mixés et les envoyés à la carte son
-        for i in range(0, step_nb_samples):
-            self.buf[i] = 0
-            for j in range(0, len(track_buffers)):
-                self.buf[i] += track_buffers[j][i]"""
-        # apres optimisation
         s = map(sum_16bits, zip(*track_buffers))
         self.buf = array('h', s)
 
-        # ici on viens envoyer on_current_step_changed à notre UI PlayIndicator avant d'incrementer l'index
+        # Here, we send on_current_step_changed to our UI PlayIndicator before incrementing the index.
         if self.on_current_step_changed is not None:
-            # décalage de 1 step du au buffer audio pour sychronisé l'affichage du play_indicator avec le son
+            # Offset of 1 step due to the audio buffer to synchronize the PlayIndicator display with the sound.
             step_index_for_display = self.current_step_index - 1
             if step_index_for_display < 0:
                 step_index_for_display += self.nb_steps
             self.on_current_step_changed(step_index_for_display)
 
         self.current_step_index += 1
-        # pour faire bouclé il faut faire revenir à zero le current_step_index
+        # To loop, the current_step_index must be reset to zero.
         if self.current_step_index >= self.nb_steps:
             self.current_step_index = 0
         return self.buf[0: step_nb_samples].tobytes()

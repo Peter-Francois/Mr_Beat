@@ -3,8 +3,8 @@
 
 MainWidget:
 <VerticalSpacingWidget>:
-    # On donne une très petite taille afin de ne pas voir les widgets lorsque la fenétre n'est pas retaillée, ensuite
-    # ils changeront de taille pour combler l'espace manquant car les tracks widgets on une taille max
+    # We give a very small size so that the widgets are not visible when the window is not resized.
+    # Later, they will change size to fill the remaining space because the track widgets have a maximum size.
     size_hint_y: 0.01
 
 
@@ -98,7 +98,7 @@ MainWidget:
                 allow_stretch: True
                 keep_ratio: False
             BoxLayout:
-                # pour mettre une marge
+                # To add a margin.
                 x: dp(16)
                 y: dp(16)
                 size_hint: None, None
@@ -113,7 +113,7 @@ MainWidget:
                     do_scroll_x: False
                     do_scroll_y: True
                     BoxLayout:
-                        # pour la scrollview on a besoin de définir une hauteur de fenêtre
+                        # For the ScrollView, we need to define a window height.
                         size_hint_min_y: root.tracks_widget_size_hint_max_y * root.nb_tracks
                         id: tracks_layout
                         orientation: 'vertical'

@@ -6,12 +6,12 @@ from audio_source_track import AudioSourceTrack
 
 class AudioEngine:
     NB_CHANNELS = 1  # 1=mono 2=stereo
-    SAMPLE_RATE = 44100  # cd sample rate. C'est une bonne norme de quality audio
+    SAMPLE_RATE = 44100  # cd sample rate. It is a good standard of audio quality.
     BUFFER_SIZE = 1024
 
     def __init__(self):
-        # connection à la sortie de la carte son
-        # Encodage du moteur audio défaut à 16 bites
+        # Connection to the sound card output.
+        # Audio engine encoding defaults to 16-bit.
         self.output_stream = get_output(channels=self.NB_CHANNELS,
                                         rate=self.SAMPLE_RATE,
                                         buffersize=self.BUFFER_SIZE)

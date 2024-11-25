@@ -1,6 +1,5 @@
 from kivy.lang import Builder
 from kivy.metrics import dp
-# from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
@@ -9,17 +8,17 @@ from kivy.uix.togglebutton import ToggleButton
 Builder.load_file("track.kv")
 
 
-# un bouton step
+# A step button
 class TrackStepButton(ToggleButton):
     pass
 
-# boutton qui va comprendre le nom du son
+# A button that will display the name of the sound.
 
 class TrackSoundButton(Button):
     pass
 
 
-# création des boutton de track et de leurs steps buttons
+# Creation of track buttons and their corresponding step buttons.
 class TrackWidget(BoxLayout):
     def __init__(self, sound, audio_engine, tracks_nb_steps, track_source, steps_left_align,
                  tracks_widget_size_hint_min_y, tracks_widget_size_hint_max_y, **kwargs):
@@ -31,16 +30,16 @@ class TrackWidget(BoxLayout):
         self.track_source = track_source
         box_layout_sound_button_and_separator = BoxLayout()
         box_layout_sound_button_and_separator.size_hint_x = None
-        # recupération du décalage des bouton step et du separateur pour le décalage du play_indicator
+        # Retrieval of the offset for the step buttons and the separator to adjust the position of the play_indicator.
         box_layout_sound_button_and_separator.width = steps_left_align
         sound_button = TrackSoundButton()
-        # récupération du nom du son depuis main.py sound
+        # Retrieving the sound name from main.py (sound).
         sound_button.text = sound.displayname
         sound_button.on_press = self.on_sound_button_press
         sound_button.background_normal = "images/sound_button_normal.png"
         sound_button.background_down = "images/sound_button_down.png"
         box_layout_sound_button_and_separator.add_widget(sound_button)
-        # separateur
+        # separator
         separateur_image = Image(source="images/track_separator.png")
         separateur_image.size_hint_x = None
         separateur_image.width = dp(15)
@@ -51,12 +50,12 @@ class TrackWidget(BoxLayout):
         self.tracks_nb_steps = tracks_nb_steps
         for i in range(0, tracks_nb_steps):
             step_button = TrackStepButton()
-            # Changement de couleur de sped tout les 4 step
+            # Change the color of the speed every 4 steps.
             if int(i/4) % 2 == 0:
                 step_button.background_normal = "images/step_normal2.png"
             else:
                 step_button.background_normal = "images/step_normal1.png"
-            # on bind (lie) le changement de statue de step_button avec la fonction  on_step_button_state
+            # We bind (link) the state change of the step_button with the function on_step_button_state.
             step_button.bind(state=self.on_step_button_state)
             self.step_buttons.append(step_button)
             self.add_widget(step_button)
