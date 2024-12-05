@@ -12,6 +12,12 @@ class Sound:
     def __init__(self, filename, displayname):
         self.filename = filename
         self.displayname = displayname
+        # testing format
+        filename_splited = filename.split(".")
+        file_format = filename_splited[1]
+        if not file_format == "wav":
+            print(f"Format unsupported for file: '{self.filename}', this app work only with .wav files")
+            exit()
         self.load_sound()
 
     def load_sound(self):
