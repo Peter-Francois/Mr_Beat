@@ -17,19 +17,29 @@ Prerequisites
 1. Install Python (3.10)
    Download and install Python from python.org. Make sure to check the "Add Python to PATH" option during installation.
 2. Install Kivy (2.3.0)
-   Install Kivy by running the following command in your terminal or command prompt:<br>
-`python -m pip install kivy` <br>
+   Install Kivy by running the following command in your terminal or command prompt:
+    ```bash 
+         python -m pip install kivy
+    ```
    You can check out the official Kivy documentation for more details on installation: [Installing Kivy](https://kivy.org/doc/stable/gettingstarted/installation.html).
 3. Download or Clone the Repository
    Clone the project using Git:
-   - `git clone https://github.com/Peter-Francois/Mr_Beat.git`
+   - ```bash 
+     git clone https://github.com/Peter-Francois/Mr_Beat.git
+     ```
    - Or download the project as a ZIP file at: https://github.com/Peter-Francois/Mr_Beat and extract it.
-4. Navigate to the Project Folder Open a terminal and navigate to the project directory:<br>
-   `cd Mr_Beat`
-5. Install Dependencies Run the following command to install all required libraries:<br>
-   `python -m pip install -r requirements.txt`
-6. Run the Application Finally, run the game by executing the main project file:<br>
-   `python main.py`
+4. Navigate to the Project Folder Open a terminal and navigate to the project directory:
+   ```bash
+   cd Mr_Beat
+   ```
+5. Install Dependencies Run the following command to install all required libraries:
+   ```bash
+   python -m pip install -r requirements.txt`
+   ```
+6. Run the Application Finally, run the game by executing the main project file:
+   ```bash
+      python main.py
+   ```
 
 ## 🎵 How to Use  
  
@@ -48,12 +58,18 @@ Prerequisites
 Contributions are welcome! Please follow these steps:
 
   1. Fork the repository.
-  2. Create a new branch for your feature:<br>
-     `git checkout -b feature-name`
-  3. Commit your changes:<br>
-     `git commit -m "Add feature-name"`
-  4. Push to your branch:<br>
-     `git push origin feature-name` 
+  2. Create a new branch for your feature:
+     ```bash
+        git checkout -b feature-name
+     ```
+  3. Commit your changes:
+     ```bash
+     git commit -m "Add feature-name"
+     ```
+  4. Push to your branch:
+     ```bash
+     git push origin feature-name
+     ```
   5. Submit a pull request.
 
 ## 📄 License  
