@@ -30,7 +30,7 @@ class VerticalSpacingWidget(Widget):
 class MainWidget(RelativeLayout):
     tracks_layout = ObjectProperty()
     play_indicator_widget = ObjectProperty()
-    TRACK_STEPS_LEFT_ALIGN = NumericProperty(dp(120))
+    TRACK_STEPS_LEFT_ALIGN = NumericProperty(dp(180))
     step_index = 0
     bpm = NumericProperty(120)
     button_less_bpm = ObjectProperty()

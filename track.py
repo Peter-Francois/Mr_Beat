@@ -17,6 +17,20 @@ class TrackStepButton(ToggleButton):
 class TrackSoundButton(Button):
     pass
 
+# A button that clear the steps of the track.
+
+class TrackClearButton(Button):
+    pass
+
+# A button that mute the track.
+
+class TrackMuteButton(ToggleButton):
+    pass
+
+# A button that play in solo the track.
+
+class TrackSoloButton(ToggleButton):
+    pass
 
 # Creation of track buttons and their corresponding step buttons.
 class TrackWidget(BoxLayout):
@@ -44,8 +58,30 @@ class TrackWidget(BoxLayout):
         separateur_image.size_hint_x = None
         separateur_image.width = dp(15)
         box_layout_sound_button_and_separator.add_widget(separateur_image)
+        
+        # clear button
+        clear_button = TrackClearButton()
+        clear_button.on_press = self.on_clear_button_press
+        clear_button.size_hint_x = None
+        clear_button.width = steps_left_align / 4
+        clear_button.background_normal = "images/clear_button_normal.png"
+        clear_button.background_down = "images/clear_button_down.png"
+        box_layout_sound_button_and_separator.add_widget(clear_button)
         self.add_widget(box_layout_sound_button_and_separator)
+        """ mute button
+        mute_button = TrackMuteButton()
+        mute_button.background_normal = "images/track_separator.png"
+        mute_button.background_down = "images/track_separator.png"
+        mute_button.on_press = self.on_mute_button_press
+        self.add_widget(mute_button)
+        # solo button
+        solo_button = TrackSoloButton()
+        solo_button.background_normal = "images/track_separator.png"
+        solo_button.background_down = "images/track_separator.png"
+        solo_button.on_press = self.on_solo_button_press
+        self.add_widget(solo_button) """
 
+        # step buttons
         self.step_buttons = []
         self.tracks_nb_steps = tracks_nb_steps
         for i in range(0, tracks_nb_steps):
@@ -63,6 +99,10 @@ class TrackWidget(BoxLayout):
     def on_sound_button_press(self):
         self.audio_engine.play_sound(self.sound.samples)
 
+    def on_clear_button_press(self):
+        for i in range(0, self.tracks_nb_steps):
+            self.step_buttons[i].state = "normal"
+
     def on_step_button_state(self, widget, value):
         steps = []
         for i in range(0, self.tracks_nb_steps):
@@ -70,6 +110,5 @@ class TrackWidget(BoxLayout):
                 steps.append(1)
             else:
                 steps.append(0)
-
         self.track_source.set_steps(steps)
 
