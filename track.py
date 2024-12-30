@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.slider import Slider
 
 Builder.load_file("track.kv")
 
@@ -40,7 +41,7 @@ class TrackWidget(BoxLayout):
         self.audio_engine = audio_engine
         self.size_hint_max_y = tracks_widget_size_hint_max_y
         self.size_hint_min_y = tracks_widget_size_hint_min_y
-        self.sound = sound
+        self.sound = sound 
         self.track_source = track_source
         box_layout_sound_button_and_separator = BoxLayout()
         box_layout_sound_button_and_separator.size_hint_x = None
@@ -58,28 +59,42 @@ class TrackWidget(BoxLayout):
         separateur_image.size_hint_x = None
         separateur_image.width = dp(15)
         box_layout_sound_button_and_separator.add_widget(separateur_image)
-        
+
+        # Slider for volume control
+        self.volume_slider = Slider(min=0, max=1, value=1)
+        self.volume_slider.bind(value=self.on_volume_change)
+        box_layout_sound_button_and_separator.add_widget(self.volume_slider)
+
+        box_layout_actions_button = BoxLayout()
+        box_layout_actions_button.size_hint_x = None
+        box_layout_actions_button.width = steps_left_align / 4
+        box_layout_actions_button.orientation = "vertical"
         # clear button
         clear_button = TrackClearButton()
         clear_button.on_press = self.on_clear_button_press
-        clear_button.size_hint_x = None
-        clear_button.width = steps_left_align / 4
         clear_button.background_normal = "images/clear_button_normal.png"
         clear_button.background_down = "images/clear_button_down.png"
-        box_layout_sound_button_and_separator.add_widget(clear_button)
-        self.add_widget(box_layout_sound_button_and_separator)
-        """ mute button
-        mute_button = TrackMuteButton()
+        box_layout_actions_button.add_widget(clear_button)
+
+        box_layout_solo_mute = BoxLayout()
+        box_layout_solo_mute.size_hint_x = None
+        box_layout_solo_mute.width = steps_left_align / 8
+        # mute button
+        """mute_button = TrackMuteButton()
         mute_button.background_normal = "images/track_separator.png"
         mute_button.background_down = "images/track_separator.png"
-        mute_button.on_press = self.on_mute_button_press
-        self.add_widget(mute_button)
-        # solo button
+        mute_button.on_press = self.track_source.audio_mute
+        box_layout_solo_mute.add_widget(mute_button)"""
+        """ solo button
         solo_button = TrackSoloButton()
         solo_button.background_normal = "images/track_separator.png"
         solo_button.background_down = "images/track_separator.png"
         solo_button.on_press = self.on_solo_button_press
-        self.add_widget(solo_button) """
+        box_layout_solo_mute.add_widget(solo_button)
+        """
+        box_layout_actions_button.add_widget(box_layout_solo_mute)
+        box_layout_sound_button_and_separator.add_widget(box_layout_actions_button)
+        self.add_widget(box_layout_sound_button_and_separator)
 
         # step buttons
         self.step_buttons = []
@@ -96,12 +111,18 @@ class TrackWidget(BoxLayout):
             self.step_buttons.append(step_button)
             self.add_widget(step_button)
 
+    def on_volume_change(self, instance, value):
+        self.track_source.set_volume(value)
+
     def on_sound_button_press(self):
         self.audio_engine.play_sound(self.sound.samples)
 
     def on_clear_button_press(self):
         for i in range(0, self.tracks_nb_steps):
             self.step_buttons[i].state = "normal"
+
+    def on_mute_button_press(self):
+        self.track_source.set_volume(0)
 
     def on_step_button_state(self, widget, value):
         steps = []
@@ -111,4 +132,3 @@ class TrackWidget(BoxLayout):
             else:
                 steps.append(0)
         self.track_source.set_steps(steps)
-

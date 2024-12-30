@@ -22,6 +22,7 @@ class AudioSourceTrack(ThreadSource):
         # The buffer has a size of 64 bytes. We fill it with bytes using b"\x00\x00",
         # which we multiply by step_nb_samples.
         self.silence = array('h', b"\x00\x00" * self.buffer_nb_samples)
+        self.volume = 1.0 
 
     def set_steps(self, steps):
         # To reset to zero if the number of steps has changed in the meantime.
@@ -49,6 +50,9 @@ class AudioSourceTrack(ThreadSource):
                 return False
         return True
 
+    def set_volume(self, volume):
+        self.volume = volume
+
     def get_bytes_array(self):
 
         result_buf = None
@@ -63,13 +67,16 @@ class AudioSourceTrack(ThreadSource):
             # 2 - Step activated and the sound has more samples than 1 step.
             if self.nb_wav_samples >= self.step_nb_samples:
                 result_buf = self.wav_samples[0: self.step_nb_samples]
+                # Apply volume to audio samples
+                result_buf = [int(sample * self.volume) for sample in result_buf]
 
             else:
                 # 3 - The step is activated, and the sound has fewer samples than 1 step.
-                # We fill the remaining space with 0 to play the rest of the sound.
                 silence_nb_samples = self.step_nb_samples - self.nb_wav_samples
                 result_buf = self.wav_samples[0:self.nb_wav_samples]
                 result_buf.extend(self.silence[0:silence_nb_samples])
+                # Apply volume to audio samples
+                result_buf = [int(sample * self.volume) for sample in result_buf]
 
         else:
             # We record the index value inside the WAV file.
@@ -84,12 +91,16 @@ class AudioSourceTrack(ThreadSource):
             # 5.1 - What we have left to play is longer than one step.
             elif self.nb_wav_samples - index >= self.step_nb_samples:
                 result_buf = self.wav_samples[index: self.step_nb_samples + index]
+                # Apply volume to audio samples
+                result_buf = [int(sample * self.volume) for sample in result_buf]
 
             # 5.2 What we have left to play is shorter than one step.
             else:
                 silence_nb_samples = self.step_nb_samples - self.nb_wav_samples + index
                 result_buf = self.wav_samples[index: self.nb_wav_samples]
                 result_buf.extend(self.silence[0:silence_nb_samples])
+                # Apply volume to audio samples
+                result_buf = [int(sample * self.volume) for sample in result_buf]
 
         self.current_sample_index += self.step_nb_samples
         self.current_step_index += 1
@@ -107,4 +118,3 @@ class AudioSourceTrack(ThreadSource):
 
     def get_bytes(self, *args, **kwargs):
         return self.get_bytes_array().tobytes()
-
