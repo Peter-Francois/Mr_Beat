@@ -80,11 +80,11 @@ class TrackWidget(BoxLayout):
         box_layout_solo_mute.size_hint_x = None
         box_layout_solo_mute.width = steps_left_align / 8
         # mute button
-        """mute_button = TrackMuteButton()
+        mute_button = TrackMuteButton()
         mute_button.background_normal = "images/track_separator.png"
         mute_button.background_down = "images/track_separator.png"
-        mute_button.on_press = self.track_source.audio_mute
-        box_layout_solo_mute.add_widget(mute_button)"""
+        mute_button.on_press = self.on_mute_button_press
+        box_layout_solo_mute.add_widget(mute_button)
         """ solo button
         solo_button = TrackSoloButton()
         solo_button.background_normal = "images/track_separator.png"
@@ -122,7 +122,7 @@ class TrackWidget(BoxLayout):
             self.step_buttons[i].state = "normal"
 
     def on_mute_button_press(self):
-        self.track_source.set_volume(0)
+        self.volume_slider.value = 0 if self.volume_slider.value != 0 else 1
 
     def on_step_button_state(self, widget, value):
         steps = []
