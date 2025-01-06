@@ -6,6 +6,7 @@ from kivy.uix.image import Image
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.slider import Slider
 from kivy.uix.label import Label
+from kivy.uix.relativelayout import RelativeLayout
 
 Builder.load_file("track.kv")
 
@@ -62,24 +63,45 @@ class TrackWidget(BoxLayout):
         box_layout_volume_control = BoxLayout()
         box_layout_volume_control.orientation = "vertical"
         box_layout_volume_control.size_hint_x = None
-        box_layout_volume_control.spacing = dp(-35)
+        box_layout_volume_control.pos_hint = {"center_y": .62}
         box_layout_volume_control.width = box_layout_actions_button.width * .25
         label_volume = Label()
         label_volume.text = "VOLUME"
         label_volume.font_size = dp(9)
+        label_volume.size_hint_y = None
+        label_volume.height = dp(10)
         box_layout_volume_control.add_widget(label_volume)
         
         # Slider for volume control
         self.volume_slider = Slider(min=0, max=1, value=1)
         self.volume_slider.size_hint_x = None
         self.volume_slider.width = box_layout_actions_button.width * .25
+        self.volume_slider.size_hint_y = None
+        self.volume_slider.height = dp(20)
         self.volume_slider.bind(value=self.on_volume_change)
         self.volume_slider.cursor_image = "images/track_separator.png"
         box_layout_volume_control.add_widget(self.volume_slider)
+
+        # Volume level display
+        relative_layout_volume_level = RelativeLayout()
+        relative_layout_volume_level.size_hint_y = None
+        relative_layout_volume_level.height = dp(22)
+        relative_layout_volume_level.size_hint_x = None
+        relative_layout_volume_level.width = dp(28)
+        relative_layout_volume_level.pos_hint = {"center_x": .5}
+        background_image = Image()
+        background_image.source = "images/bpm_lcd_background.png"
+        background_image.allow_stretch = True
+        background_image.keep_ratio = False
+        relative_layout_volume_level.add_widget(background_image)
+        relative_layout_volume_level.add_widget(Label(text="888",pos_hint={"center_y": .57}, font_name="fonts/Lcd.ttf", font_size=dp(20), opacity=.1))
+        relative_layout_volume_level.add_widget(Label(text="100",pos_hint={"center_y": .57}, font_name="fonts/Lcd.ttf", font_size=dp(20)))
+        box_layout_volume_control.add_widget(relative_layout_volume_level)
         box_layout_actions_button.add_widget(box_layout_volume_control)
 
         box_layout_clear_mute_solo_button = BoxLayout()
         box_layout_clear_mute_solo_button.spacing = dp(12)
+        box_layout_clear_mute_solo_button.pos_hint = {"center_y": .62}
         box_layout_clear_mute_solo_button.size_hint_x = None
         box_layout_clear_mute_solo_button.width = box_layout_actions_button.width * .3
         box_layout_clear_mute_solo_button.orientation = "vertical"
