@@ -51,7 +51,7 @@ class TrackWidget(BoxLayout):
         box_layout_actions_button.width = steps_left_align
         sound_button = TrackSoundButton()
         sound_button.size_hint_x = None
-        sound_button.width = box_layout_actions_button.width * .45
+        sound_button.width = box_layout_actions_button.width * .5
         # Retrieving the sound name from main.py (sound).
         sound_button.text = sound.displayname
         sound_button.on_press = self.on_sound_button_press
@@ -100,10 +100,10 @@ class TrackWidget(BoxLayout):
         box_layout_actions_button.add_widget(box_layout_volume_control)
 
         box_layout_clear_mute_solo_button = BoxLayout()
-        box_layout_clear_mute_solo_button.spacing = dp(12)
         box_layout_clear_mute_solo_button.pos_hint = {"center_y": .62}
+        box_layout_clear_mute_solo_button.spacing = dp(-2)
         box_layout_clear_mute_solo_button.size_hint_x = None
-        box_layout_clear_mute_solo_button.width = box_layout_actions_button.width * .3
+        box_layout_clear_mute_solo_button.width = box_layout_actions_button.width * .25
         box_layout_clear_mute_solo_button.orientation = "vertical"
         # clear button
         clear_button = TrackClearButton()
