@@ -95,7 +95,8 @@ class TrackWidget(BoxLayout):
         background_image.keep_ratio = False
         relative_layout_volume_level.add_widget(background_image)
         relative_layout_volume_level.add_widget(Label(text="888",pos_hint={"center_y": .57}, font_name="fonts/Lcd.ttf", font_size=dp(20), opacity=.1))
-        relative_layout_volume_level.add_widget(Label(text="100",pos_hint={"center_y": .57}, font_name="fonts/Lcd.ttf", font_size=dp(20)))
+        self.volume_level = Label(text="100",pos_hint={"center_y": .57}, font_name="fonts/Lcd.ttf", font_size=dp(20))
+        relative_layout_volume_level.add_widget(self.volume_level)
         box_layout_volume_control.add_widget(relative_layout_volume_level)
         box_layout_actions_button.add_widget(box_layout_volume_control)
 
@@ -144,6 +145,8 @@ class TrackWidget(BoxLayout):
 
     def on_volume_change(self, instance, value):
         self.track_source.set_volume(value)
+        # We update the volume level display.
+        self.volume_level.text = str(int(value * 100))
 
     def on_sound_button_press(self):
         self.audio_engine.play_sound(self.sound.samples)
