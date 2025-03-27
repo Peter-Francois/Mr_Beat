@@ -89,6 +89,13 @@ class MainWidget(RelativeLayout):
             self.button_less_bpm.disabled = False
         self.audio_mixer.set_bpm(self.bpm)
 
+    def clear_tracks(self):
+        if self.tracks_layout is None:
+            return
+        for child in self.tracks_layout.children:
+            if isinstance(child, TrackWidget):
+                child.clear_track()
+
 
 class MrBeatApp(App):
     pass

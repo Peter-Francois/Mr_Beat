@@ -142,6 +142,10 @@ class TrackWidget(BoxLayout):
             step_button.bind(state=self.on_step_button_state)
             self.step_buttons.append(step_button)
             self.add_widget(step_button)
+    
+    def clear_track(self):
+        for i in range(0, self.tracks_nb_steps):
+            self.step_buttons[i].state = "normal"
 
     def on_volume_change(self, instance, value):
         self.track_source.set_volume(value)
