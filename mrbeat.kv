@@ -36,7 +36,7 @@ MainWidget:
 
             BoxLayout:
                 size_hint_x: None
-                width: dp(165)
+                width: dp(195)
                 pos_hint: {"center_x": 0.5}
                 ControlButton:
                     background_normal: "images/play_button_normal.png"
@@ -47,17 +47,17 @@ MainWidget:
                     background_down: "images/stop_button_down.png"
                     on_press: root.audio_mixer.audio_stop()
 
-            ControlButton:
-                size_hint: None, None
-                width: dp(65)
-                height: dp(35)
-                text: "CLEAR \nTRACK"
-                font_size: dp(10)
-                bold: True
-                pos_hint: {"center_x": 0.7, "center_y": .5}
-                background_normal : "images/action_button_normal.png"
-                background_down : "images/action_button_down.png"
-                on_press: root.clear_tracks()
+                ControlButton:
+                    size_hint: None, None
+                    width: dp(55)
+                    height: dp(35)
+                    pos_hint: {"center_x": 0.5, "center_y": .5}
+                    text: "CLEAR \nTRACKS"
+                    font_size: dp(10)
+                    bold: True
+                    background_normal : "images/action_button_normal.png"
+                    background_down : "images/action_button_down.png"
+                    on_press: root.clear_tracks()
 
             BoxLayout:
                 size_hint_x: None
