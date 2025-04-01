@@ -110,9 +110,9 @@ class TrackWidget(BoxLayout):
         clear_button = TrackClearButton()
         clear_button.on_press = self.on_clear_button_press
         box_layout_clear_mute_solo_button.add_widget(clear_button)
-        clear_button = TrackClearButton()
-        clear_button.on_press = self.on_clear_button_press
-        box_layout_clear_mute_solo_button.add_widget(clear_button)
+        mute_button = TrackMuteButton()
+        mute_button.on_press = self.on_mute_button_pressed
+        box_layout_clear_mute_solo_button.add_widget(mute_button)
         clear_button = TrackClearButton()
         clear_button.on_press = self.on_clear_button_press
         box_layout_clear_mute_solo_button.add_widget(clear_button)
