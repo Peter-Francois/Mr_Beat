@@ -38,6 +38,7 @@ class MainWidget(RelativeLayout):
     nb_tracks = NumericProperty(0)
     tracks_widget_size_hint_min_y = NumericProperty(dp(45))
     tracks_widget_size_hint_max_y = NumericProperty(dp(75))
+    _solo_track_index = -1
 
     def __init__(self, **kwargs):
         super(MainWidget, self).__init__(**kwargs)
@@ -51,15 +52,15 @@ class MainWidget(RelativeLayout):
     def on_parent(self, widget, parent):
         # Once the KV file is loaded, we create the different buttons and spaces.
         self.play_indicator_widget.set_nb_steps(TRACK_NB_STEPS)
-        for i in range(0, self.sound_kit_service.soundkit.get_nb_tracks()):
+        for track_index in range(0, self.sound_kit_service.soundkit.get_nb_tracks()):
             # To transmit the sound name to the track file coming from the sound in the sound_kit_service.
-            sound = self.sound_kit_service.get_sound_at(i)
+            sound = self.sound_kit_service.get_sound_at(track_index)
             # We add empty widgets to create a margin between the tracks.
             self.tracks_layout.add_widget(VerticalSpacingWidget())
             self.tracks_layout.add_widget(TrackWidget(sound, self.audio_engine, TRACK_NB_STEPS,
-                                                      self.audio_mixer.tracks[i], self.TRACK_STEPS_LEFT_ALIGN,
+                                                      self.audio_mixer.tracks[track_index], self.TRACK_STEPS_LEFT_ALIGN,
                                                       self.tracks_widget_size_hint_min_y,
-                                                      self.tracks_widget_size_hint_max_y))
+                                                      self.tracks_widget_size_hint_max_y, track_index, self.solo_button_pressed))
 
         # The last empty widget is for the bottom margin of the app.
         self.tracks_layout.add_widget(VerticalSpacingWidget())
@@ -95,6 +96,31 @@ class MainWidget(RelativeLayout):
         for child in self.tracks_layout.children:
             if isinstance(child, TrackWidget):
                 child.clear_track()
+
+    def solo_button_pressed(self, track_index):
+
+        is_currently_solo = (self._solo_track_index == track_index)
+        if is_currently_solo:
+            # Désactiver le mode solo : réactiver toutes les pistes
+            self._solo_track_index = -1
+            for child in self.tracks_layout.children:
+                if isinstance(child, TrackWidget):
+                    child.set_mute(False)
+                    child.solo_button.color = [1, 1, 1, 1] 
+
+        else:
+            # Activer le mode solo pour track_index
+            print(f"Activation du mode solo pour piste: {track_index}")
+            self._solo_track_index = track_index
+            for child in self.tracks_layout.children:
+                if isinstance(child, TrackWidget):
+                    if child.track_index == track_index:
+                        child.set_mute(False)
+                        child.solo_button.color = [1, 0, 0, 1]
+                    else:
+                        child.set_mute(True)
+                        child.solo_button.color = [1, 1, 1, 1] 
+
 
 
 class MrBeatApp(App):

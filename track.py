@@ -7,6 +7,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.slider import Slider
 from kivy.uix.label import Label
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.properties import ObjectProperty, NumericProperty, BooleanProperty, StringProperty, ListProperty
 
 Builder.load_file("track.kv")
 
@@ -37,15 +38,17 @@ class TrackSoloButton(ToggleButton):
 
 # Creation of track buttons and their corresponding step buttons.
 class TrackWidget(BoxLayout):
+    solo_button = ObjectProperty()
+    track_index = NumericProperty(-1)
     def __init__(self, sound, audio_engine, tracks_nb_steps, track_source, steps_left_align,
-                 tracks_widget_size_hint_min_y, tracks_widget_size_hint_max_y, nb_tracks, **kwargs):
+                 tracks_widget_size_hint_min_y, tracks_widget_size_hint_max_y, track_index, solo_callback, **kwargs):
         super(TrackWidget, self).__init__(**kwargs)
         self.audio_engine = audio_engine
         self.size_hint_max_y = tracks_widget_size_hint_max_y
         self.size_hint_min_y = tracks_widget_size_hint_min_y
         self.sound = sound 
         self.track_source = track_source
-        self.nb_tracks = nb_tracks
+        self.track_index = track_index
         box_layout_actions_button = BoxLayout()
         box_layout_actions_button.size_hint_x = None
         # Retrieval of the offset for the step buttons and the separator to adjust the position of the play_indicator.
@@ -116,10 +119,11 @@ class TrackWidget(BoxLayout):
         self.mute_button.on_press = self.on_mute_button_pressed
         box_layout_clear_mute_solo_button.add_widget(self.mute_button)
 
-        '''# solo button
+        # solo button
         self.solo_button = TrackSoloButton()
-        self.solo_button.on_press = self.on_solo_button_pressed
-        box_layout_clear_mute_solo_button.add_widget(self.solo_button)'''
+        if self.solo_button:
+            self.solo_button.on_press = lambda: solo_callback(self.track_index)
+        box_layout_clear_mute_solo_button.add_widget(self.solo_button)
 
         box_layout_actions_button.add_widget(box_layout_clear_mute_solo_button)
         self.add_widget(box_layout_actions_button)
@@ -163,13 +167,21 @@ class TrackWidget(BoxLayout):
             self.volume_slider.value = 0
             self.mute_button.color = [0, 0, 0, 1]
     
-    '''def on_solo_button_pressed(self):
+    def on_solo_button_pressed(self):
         for i in range(0, self.nb_tracks):
             if self.sound_button.text != "down":
                 pass
             else:
                 self.mute_button.state = "down"
-                self.on_mute_button_pressed()'''
+                self.on_mute_button_pressed()
+
+    def set_mute(self, mute_state: bool):
+        if mute_state:
+            self.volume_slider.value = 0
+            self.mute_button.color = [0, 0, 0, 1]
+        else:
+            self.volume_slider.value = 1
+            self.mute_button.color = [1, 1, 1, 1]
 
 
     def on_step_button_state(self, widget, value):
