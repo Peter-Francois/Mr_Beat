@@ -1,6 +1,6 @@
 ## 🎶 Mr Beat 
 
-Mr Beat  is an interactive drum machine application that allows users to create and play drum beats right from their device.
+Mr Beat  is an interactive groovebox application that allows users to create and play drum beats right from their device.
 This application has been developed to suit all types of users. Whether you are a musician or just an enthusiast, your creativity will be put to good use, and you will quickly be proud of the results.
 
 ## 🛠 Features  
